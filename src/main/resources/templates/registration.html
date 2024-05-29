@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        img {
+            width: 100px;
+            height: 100px;
+            border-radius: 10px;
+            margin: 0px auto;
+            border-radius: 50%;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="file"] {
+            width: 100%;
+
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            padding: 5px;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .registration-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        .registration-form h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: calc(100% - 20px); /* Subtracting padding from width */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            margin-top: 5px; /* Adding margin for spacing */
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .form-group ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .form-group ul li {
+            color: red;
+            font-size: 14px;
+        }
+        .img-block{
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('imageInput').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('profileImage').src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <form action="#" class="registration-form" enctype="multipart/form-data" th:action="@{/signUp}" method="post" th:object="${people}">
+        <h2>User Registration</h2>
+        <div class="form-group ">
+            <div class="form-group img-block">
+                <img id="profileImage" src=""  class="profile-image">
+                <input id="imageInput" type="file" accept="image/png, image/jpeg" name="image" class="image-input" >
+            </div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name"  th:field="*{name}">
+            <ul th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                <li th:each="err : ${#fields.errors('name')}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label for="surname">Surname:</label>
+            <input type="text" id="surname" name="surname" th:field="*{surname}" >
+            <ul th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">
+                <li th:each="err : ${#fields.errors('surname')}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" th:field="*{email}" >
+            <ul th:if="${#fields.hasErrors('email')}" th:errors="*{email}">
+                <li th:each="err : ${#fields.errors('email')}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label for="login">Login:</label>
+            <input type="text" id="login" name="login" th:field="*{login}" >
+            <ul th:if="${#fields.hasErrors('login')}" th:errors="*{login}">
+                <li th:each="err : ${#fields.errors('login')}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" th:field="*{password}" >
+            <ul th:if="${#fields.hasErrors('password')}" th:errors="*{password}">
+                <li th:each="err : ${#fields.errors('password')}" th:text="${err}">Error</li>
+            </ul>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+</div>
+</body>
+</html>

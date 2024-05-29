@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo List</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+
+            margin: 25px auto;
+            padding: 10px 20px;
+        }
+
+        .header-content {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        .logo {
+            font-family: Gigi;
+            align-self: center;
+            font-size: 32px;
+        }
+        .logo a{
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .username {
+            margin: 5px 10px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: flex;
+
+        }
+        .todo-form{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin: 25px auto;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button.logout {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        .btn-logout {
+            display: inline-block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #0056b3;
+            transition: 0.3s;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
+        .delete {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete:hover {
+            background-color: #bd2130;
+        }
+        .note {
+            background-color: rgba(54, 146, 245, 0.56);
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            color: white;
+            font-weight: bold;
+            text-underline: none;
+        }
+        a{
+            text-decoration: none;
+            align-items: flex-start;
+        }
+        .note-content:last-child{
+
+            align-self: flex-end;
+        }
+        .note-content:first-child{
+            font-size: 22px;
+            font-weight: bold;
+            font-family: "Arial Black";
+        }
+        .note:hover{
+            background-color: rgb(25, 131, 209);
+            transition: 0.3s;
+
+        }
+        .note:hover span{
+            color: #f2f2f2;
+            transition: 0.3s;
+
+        }
+        .note-content {
+            max-width: 100%;
+            font-size: 14px;
+            margin: 10px;
+            color: #333;
+        }
+        .note-content_end{
+
+            font-size: 12px;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content" >
+        <div class="logo">
+            <a href="/main">Todo List</a>
+        </div>
+        <div class="user-info">
+            <img th:src="*{'data:image/jpeg;base64,'+{image}}"  class="avatar">
+            <span class="username" th:text="*{Username}">Name</span>
+            <a th:href="@{/logout}" id="logout" class="btn-logout" th>Logout</a>
+        </div>
+    </div>
+</header>
+<div class="container">
+    <h1>Todo List</h1>
+    <form action="#" id="todo-form" class="todo-form" th:action="@{/todo/main/add}" th:method="GET"  >
+        <button type="submit">Add notes</button>
+    </form>
+    <ul id="todo-list"></ul>
+    <a  th:each="note : ${userList}" class="note" th:href="@{notes/{id}(id=${note.id})}">
+        <span class="note-content" th:text="${note.getNotes()}">Notes</span>
+        <span class="note-content" th:text="${note.getDescription()}">Description</span>
+        <span class="note-content note-content_end" th:text="${note.getFormattedDate()}">Date</span>
+    </a>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

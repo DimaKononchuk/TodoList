@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="email"],
+        input[type="text"],
+        input[type="submit"] {
+            width: calc(100% - 21px);
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            display: inline-block;
+        }
+
+        input[type="email"],
+        input[type="text"] {
+            width: 100%;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+            transition: 0.3s;
+        }
+
+        .message {
+            text-align: center;
+            color: #007bff;
+        }
+
+        a {
+            display: inline-block;
+            margin-left: 10px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+            transition: 0.3s;
+        }
+        .green-text {
+            display: inline-block;
+            margin-left: 10px;
+            color: #4CAF50; /* Зелений колір тексту */
+            text-decoration: none;
+            transition: 0.3s all;
+        }
+
+        .green-text::after {
+            content: "\2713"; /* Символ галочки */
+            margin-left: 3px; /* Відступ від тексту */
+            transition: 0.3s all;
+        }
+        .error_li{
+            margin: 5px;
+            color: #dc3545;
+        }
+    </style>
+    <script>
+        let response;
+        function sendCode(){
+            const data = {
+                status: 'send',
+                email:document.getElementById("email").value
+            };
+            fetch('/sendCode',{
+                method:'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    // Check if the response is JSON
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        throw new Error('Server did not return JSON');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('sendRequestBtn').classList.add('green-text');
+
+                    console.log('Success:', data);
+
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+
+                });
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h3>Enter your email to reset your password</h3>
+    <form th:action="@{/forgotpassword}" th:method="post" th:object="${forgotPassword}">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" th:field="*{email}" required>
+        <a id="sendRequestBtn"  onclick="sendCode()">Get code!</a>
+        <input type="text" id="code" name="code" th:field="*{code}" required>
+        <li class="error_li" th:if="${#fields.hasErrors('code')}" th:errors="*{code}">error</li>
+
+        <input type="submit" value="Reset Password">
+    </form>
+    <div class="message">
+        <!-- Повідомлення про результат відправки форми може бути вставлено тут -->
+    </div>
+</div>
+</body>
+</html>

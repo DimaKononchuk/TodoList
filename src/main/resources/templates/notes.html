@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Додавання нотатки</title>
+
+    <style>
+        header {
+            background-color: #007bff;
+            color: white;
+        }
+        .logo {
+            font-family: Gigi;
+            align-self: center;
+            font-size: 32px;
+
+
+        }
+        .logo a{
+            color: #ffffff;
+            text-decoration: none;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 800px;
+
+            margin: 25px auto;
+            padding: 10px 20px;
+        }
+
+        .header-content {
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
+        .username {
+            margin: 5px 10px;
+        }
+
+        button.logout {
+            background-color: transparent;
+            border: 1px solid white;
+            color: white;
+        }
+        .btn-logout {
+            display: inline-block;
+            padding: 10px 15px;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-logout:hover {
+            background-color: #0056b3;
+            transition: 0.3s;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box; /* Додаємо цей рядок для врахування padding у ширині */
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+        .btnDispalyNone{
+            display: none;
+        }
+
+        .btnDispalyBlock{
+            display: block;
+        }
+        button:active{
+            background-color: #004080;
+        }
+        .error_li{
+            margin: 10px;
+            color: #dc3545;
+        }
+        .btn-danger{
+            display: block;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-content" >
+        <div class="logo">
+            <a href="/todo/main">Todo List</a>
+        </div>
+        <div class="user-info">
+            <img th:src="*{'data:image/jpeg;base64,'+{image}}"  class="avatar">
+            <span class="username" th:text="*{Username}">Name</span>
+            <a th:href="@{/logout}" id="logout" class="btn-logout" th>Logout</a>
+        </div>
+    </div>
+</header>
+<div class="container">
+
+    <h1 th:text="${TextLogo}">Adding a note</h1>
+    <form id="formNotes" action="#" th:action="@{${url}}"  th:method="${urlMethod}" th:object="${desiredNote}">
+        <div class="form-group">
+            <label for="title">Heading:</label>
+            <input type="text" id="title"   th:field="*{notes}" >
+            <li class="error_li" th:if="${#fields.hasErrors('notes')}"  th:errors="*{notes}">error</li>
+        </div>
+        <div class="form-group">
+            <label for="content">Content:</label>
+            <textarea id="content" rows="5"    th:field="*{description}" ></textarea>
+            <li class="error_li" th:if="${#fields.hasErrors('description')}"  th:errors="*{description}">error</li>
+        </div>
+        <button type="submit" th:text="${TextBtn}">Save notes</button>
+        <a th:href="@{/todo/notes/{id}/delete(id=${desiredNote.getId()})}" th:class="${class}" class="btn btn-danger" >Remove notes</a>
+
+    </form>
+</div>
+</body>
+</html>
